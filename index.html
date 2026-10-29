@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FortiSOAR Playbook Builder: Claude AI Skill for SOC Automation</title>
+<meta name="description" content="Free, open-source Claude AI skill that builds, validates and reviews FortiSOAR playbooks as importable JSON: alert triage, incident response, phishing, IOC enrichment, FortiSIEM queries and PDF reports.">
+<meta name="keywords" content="FortiSOAR, FortiSOAR playbook, FortiSOAR playbook builder, Claude skill, Claude plugin, SOAR automation, SOC automation, FortiSIEM, incident response, Fortinet">
+<meta name="author" content="Jimit Patel">
+<link rel="canonical" href="https://git-jimit.github.io/fortisoar-playbook-builder-site/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="FortiSOAR Playbook Builder: Claude AI Skill">
+<meta property="og:description" content="Describe a playbook in plain English. Get an importable FortiSOAR JSON export, checked by a static validator.">
+<meta property="og:url" content="https://git-jimit.github.io/fortisoar-playbook-builder-site/">
+<meta property="og:image" content="https://git-jimit.github.io/fortisoar-playbook-builder-site/og-image.png">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="640">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://git-jimit.github.io/fortisoar-playbook-builder-site/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "FortiSOAR Playbook Builder",
+  "applicationCategory": "SecurityApplication",
+  "operatingSystem": "Any (Claude Code, Claude.ai, Claude desktop)",
+  "description": "Claude AI skill that builds, validates and reviews FortiSOAR playbooks as importable JSON exports.",
+  "softwareVersion": "1.1.2",
+  "license": "https://opensource.org/licenses/MIT",
+  "url": "https://git-jimit.github.io/fortisoar-playbook-builder-site/",
+  "codeRepository": "https://github.com/git-Jimit/fortisoar-playbook-builder",
+  "author": {"@type": "Person", "name": "Jimit Patel", "url": "https://github.com/git-Jimit"},
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+}
+</script>
+<style>
+:root{--bg:#0f1720;--panel:#16212c;--line:#253445;--text:#e8eef3;--muted:#9fb0bf;--accent:#2ec4b6;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:880px;margin:0 auto;padding:48px 16px 64px}
+h1{font-size:clamp(2rem,6vw,3.2rem);line-height:1.1;margin:0 0 12px}
+h1 span{color:var(--accent)}
+h2{margin-top:48px;font-size:1.4rem}
+p.lead{font-size:1.15rem;color:var(--muted);margin:0 0 28px}
+a{color:var(--accent)}
+.btns{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-block;padding:10px 18px;border-radius:8px;border:1px solid var(--accent);text-decoration:none;font-weight:600}
+.btn.primary{background:var(--accent);color:#06201d}
+img.hero{width:100%;height:auto;border-radius:12px;border:1px solid var(--line);margin:32px 0 0}
+ul{padding-left:20px}
+pre{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px;overflow-x:auto;font-size:.9rem}
+blockquote{margin:0;padding:12px 16px;background:var(--panel);border-left:3px solid var(--accent);border-radius:4px;color:var(--muted)}
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+</style>
+</head>
+<body>
+<main>
+<h1>Forti<span>SOAR</span> Playbook Builder</h1>
+<p class="lead">A free, open-source Claude AI skill that builds, modifies, validates and reviews FortiSOAR playbooks as complete, importable JSON exports.</p>
+<div class="btns">
+  <a class="btn primary" href="https://github.com/git-Jimit/fortisoar-playbook-builder">View on GitHub</a>
+  <a class="btn" href="https://github.com/git-Jimit/fortisoar-playbook-builder/releases/latest">Download latest release</a>
+</div>
+<img class="hero" src="og-image.png" width="1280" height="640" alt="FortiSOAR Playbook Builder: a security alert flowing through condition checks, actions and enrichment to resolution">
+
+<h2>What it does</h2>
+<p>Describe the playbook you want in plain English. Claude writes the FortiSOAR export, and a bundled static validator checks it before you import it. Every rule in the skill comes from a real failure on a FortiSOAR appliance.</p>
+<ul>
+  <li>Alert triage and incident response playbooks</li>
+  <li>IOC enrichment (IPs, domains, hashes, URLs) and phishing analysis</li>
+  <li>Threat hunting with FortiSIEM and FortiAnalyzer queries</li>
+  <li>Response actions such as block and isolate, with client approval links</li>
+  <li>PDF and HTML reports generated inside FortiSOAR</li>
+  <li>Reviewing, debugging and adapting existing playbook exports for another client or tenant</li>
+</ul>
+
+<h2>Example prompt</h2>
+<blockquote>Build a FortiSOAR playbook that runs on alert create, enriches every IP with FortiGuard and VirusTotal, and closes the alert as false positive if all are clean.</blockquote>
+
+<h2>Install in Claude Code</h2>
+<pre><code>/plugin marketplace add git-Jimit/fortisoar-playbook-builder
+/plugin install fortisoar-playbook-builder@fortisoar-skills</code></pre>
+<p>On Claude.ai or the Claude desktop app, zip the <code>skills/fortisoar-playbook-builder</code> folder from the repository and upload it under Customize → Skills. Full steps are in the <a href="https://github.com/git-Jimit/fortisoar-playbook-builder#install">README</a>.</p>
+
+<h2>Validate any playbook export</h2>
+<pre><code>python3 skills/fortisoar-playbook-builder/scripts/validate_playbook.py my_playbook.json</code></pre>
+<p>The scripts only read the file you pass them. They make no network calls and collect no data. See the <a href="https://github.com/git-Jimit/fortisoar-playbook-builder/blob/main/PRIVACY.md">privacy policy</a>.</p>
+
+<footer>
+  MIT License © 2026 <a href="https://github.com/git-Jimit">Jimit Patel</a> ·
+  <a href="https://github.com/git-Jimit/fortisoar-playbook-builder/issues">Report an issue</a><br>
+  Not affiliated with or endorsed by Fortinet. FortiSOAR, FortiSIEM and FortiAnalyzer are trademarks of Fortinet, Inc.
+</footer>
+</main>
+</body>
+</html>
