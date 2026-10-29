@@ -7,7 +7,9 @@
 <meta name="description" content="Free, open-source Claude AI skill that builds, validates and reviews FortiSOAR playbooks as importable JSON: alert triage, incident response, phishing, IOC enrichment, FortiSIEM queries and PDF reports.">
 <meta name="keywords" content="FortiSOAR, FortiSOAR playbook, FortiSOAR playbook builder, Claude skill, Claude plugin, SOAR automation, SOC automation, FortiSIEM, incident response, Fortinet">
 <meta name="author" content="Jimit Patel">
+<meta name="theme-color" content="#0b131b">
 <link rel="canonical" href="https://git-jimit.github.io/fortisoar-playbook-builder-site/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b131b'/%3E%3Cpath d='M9 8h14v4H13v3h8v4h-8v5H9z' fill='%232ec4b6'/%3E%3C/svg%3E">
 <meta property="og:type" content="website">
 <meta property="og:title" content="FortiSOAR Playbook Builder: Claude AI Skill">
 <meta property="og:description" content="Describe a playbook in plain English. Get an importable FortiSOAR JSON export, checked by a static validator.">
@@ -33,64 +35,362 @@
   "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "Is FortiSOAR Playbook Builder free?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Yes. It is open source under the MIT License. You need your own Claude account to use it."}},
+    {"@type": "Question", "name": "Does the skill connect to my FortiSOAR instance?",
+     "acceptedAnswer": {"@type": "Answer", "text": "No. Claude writes a JSON export file, and you import it into FortiSOAR yourself. The bundled scripts make no network calls."}},
+    {"@type": "Question", "name": "Which Claude apps does it work in?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Claude Code as a plugin, and Claude.ai or the Claude desktop app by uploading the skill folder."}},
+    {"@type": "Question", "name": "Can it review a playbook I already have?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Yes. Give it an existing FortiSOAR playbook export and it can review, debug, extend or adapt it for another client or tenant."}},
+    {"@type": "Question", "name": "Is it made by Fortinet?",
+     "acceptedAnswer": {"@type": "Answer", "text": "No. It is an independent community project, not affiliated with or endorsed by Fortinet."}}
+  ]
+}
+</script>
 <style>
-:root{--bg:#0f1720;--panel:#16212c;--line:#253445;--text:#e8eef3;--muted:#9fb0bf;--accent:#2ec4b6;}
+:root{
+  --bg:#0b131b; --bg2:#0f1922; --panel:#131f2a; --panel2:#172633; --line:#22323f; --line2:#2d4152;
+  --text:#e9eff4; --muted:#9db0bf; --dim:#6f8597;
+  --accent:#2ec4b6; --accent-ink:#04201d; --red:#f0645a; --amber:#f2b33d; --blue:#4a8fe7; --green:#3ad29f;
+  --mono:ui-monospace,SFMono-Regular,"Cascadia Code",Consolas,monospace;
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-main{max-width:880px;margin:0 auto;padding:48px 16px 64px}
-h1{font-size:clamp(2rem,6vw,3.2rem);line-height:1.1;margin:0 0 12px}
-h1 span{color:var(--accent)}
-h2{margin-top:48px;font-size:1.4rem}
-p.lead{font-size:1.15rem;color:var(--muted);margin:0 0 28px}
-a{color:var(--accent)}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+code{font-family:var(--mono);font-size:.9em}
+
+/* nav */
+nav{position:sticky;top:0;z-index:10;background:rgba(11,19,27,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.brand{font-weight:700;color:var(--text);letter-spacing:-.01em}
+.brand b{color:var(--accent);font-weight:700}
+nav ul{display:flex;gap:24px;list-style:none;margin:0;padding:0;font-size:.92rem}
+nav ul a{color:var(--muted)}
+nav ul a:hover{color:var(--text);text-decoration:none}
+@media (max-width:720px){nav ul li:not(:last-child){display:none}}
+
+/* hero */
+.hero{position:relative;overflow:hidden;padding:88px 0 72px;border-bottom:1px solid var(--line)}
+.hero::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(600px 300px at 85% 30%,rgba(46,196,182,.12),transparent 70%),
+  radial-gradient(1px 1px at 1px 1px,rgba(157,176,191,.18) 1px,transparent 0) 0 0/22px 22px;
+  mask-image:linear-gradient(180deg,#000 60%,transparent);pointer-events:none}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+@media (max-width:900px){.hero .wrap{grid-template-columns:1fr}.hero{padding:56px 0 48px}}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:5px 12px;border:1px solid var(--line2);border-radius:999px;font-size:.8rem;color:var(--muted);background:var(--panel)}
+.pill i{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(58,210,159,.18)}
+h1{font-size:clamp(2.4rem,6vw,4rem);line-height:1.04;letter-spacing:-.03em;margin:20px 0 18px}
+h1 .a{color:var(--accent)}
+.lead{font-size:1.18rem;color:var(--muted);max-width:34em;margin:0 0 30px}
 .btns{display:flex;flex-wrap:wrap;gap:12px}
-.btn{display:inline-block;padding:10px 18px;border-radius:8px;border:1px solid var(--accent);text-decoration:none;font-weight:600}
-.btn.primary{background:var(--accent);color:#06201d}
-img.hero{width:100%;height:auto;border-radius:12px;border:1px solid var(--line);margin:32px 0 0}
-ul{padding-left:20px}
-pre{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px;overflow-x:auto;font-size:.9rem}
-blockquote{margin:0;padding:12px 16px;background:var(--panel);border-left:3px solid var(--accent);border-radius:4px;color:var(--muted)}
-footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:10px;border:1px solid var(--line2);color:var(--text);font-weight:600;font-size:.95rem;background:var(--panel)}
+.btn:hover{text-decoration:none;border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn svg{width:18px;height:18px}
+.meta{display:flex;flex-wrap:wrap;gap:18px;margin-top:28px;font-size:.85rem;color:var(--dim)}
+.meta span::before{content:"✓ ";color:var(--accent)}
+
+/* flow diagram */
+.flow{position:relative;max-width:420px;justify-self:center;width:100%}
+.flow svg{width:100%;height:auto;display:block}
+.node rect{fill:var(--panel);stroke:var(--line2)}
+.node text{fill:var(--text);font:600 14px Inter,system-ui,sans-serif}
+.node .sub{fill:var(--line2)}
+.edge{fill:none;stroke:#4f6577;stroke-width:2}
+.pulse{fill:var(--accent)}
+
+/* sections */
+section{padding:84px 0;border-bottom:1px solid var(--line)}
+section.alt{background:var(--bg2)}
+.eyebrow{font:600 .75rem var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:0 0 10px}
+h2{font-size:clamp(1.7rem,3.5vw,2.3rem);letter-spacing:-.02em;line-height:1.15;margin:0 0 14px}
+.sec-lead{color:var(--muted);max-width:40em;margin:0 0 44px;font-size:1.05rem}
+
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media (max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:600px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:24px;transition:border-color .2s,transform .2s}
+.card:hover{border-color:var(--line2);transform:translateY(-2px)}
+.card .ic{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;margin-bottom:16px;background:var(--panel2);border:1px solid var(--line2)}
+.card .ic svg{width:20px;height:20px}
+.card h3{margin:0 0 6px;font-size:1.05rem}
+.card p{margin:0;color:var(--muted);font-size:.94rem}
+
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;counter-reset:s}
+@media (max-width:800px){.steps{grid-template-columns:1fr}}
+.step{position:relative;padding:26px 24px 24px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+.step::before{counter-increment:s;content:"0" counter(s);font:700 .8rem var(--mono);color:var(--accent);display:block;margin-bottom:12px;letter-spacing:.1em}
+.step h3{margin:0 0 6px;font-size:1.05rem}
+.step p{margin:0;color:var(--muted);font-size:.94rem}
+
+/* prompt demo */
+.demo{margin-top:36px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:800px){.demo{grid-template-columns:1fr}}
+.win{border:1px solid var(--line2);border-radius:14px;background:#0a1118;overflow:hidden}
+.win-bar{display:flex;align-items:center;gap:7px;padding:10px 14px;border-bottom:1px solid var(--line);font:.78rem var(--mono);color:var(--dim)}
+.win-bar i{width:10px;height:10px;border-radius:50%;background:var(--line2)}
+.win-bar span{margin-left:8px}
+.win-body{padding:18px;font-size:.95rem}
+.win-body.prompt{color:var(--text)}
+.win-body pre{margin:0;font:.82rem/1.6 var(--mono);color:var(--muted);white-space:pre-wrap;word-break:break-word}
+.k{color:#7cc7ff}.s{color:#a5e5a0}.ok{color:var(--green)}
+
+/* install */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:-1px;position:relative}
+.tab{appearance:none;border:1px solid var(--line);border-bottom:none;background:transparent;color:var(--muted);padding:10px 16px;border-radius:10px 10px 0 0;font:600 .9rem inherit;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--panel);color:var(--text);border-color:var(--line2)}
+.panel{border:1px solid var(--line2);border-radius:0 14px 14px 14px;background:var(--panel);padding:24px}
+.panel[hidden]{display:none}
+.panel p{color:var(--muted);margin:0 0 14px}
+.panel p:last-child{margin-bottom:0}
+.code{position:relative;background:#0a1118;border:1px solid var(--line);border-radius:10px;margin:0 0 14px}
+.code pre{margin:0;padding:16px 64px 16px 16px;overflow-x:auto;font:.86rem/1.7 var(--mono);color:var(--text)}
+.copy{position:absolute;top:8px;right:8px;border:1px solid var(--line2);background:var(--panel2);color:var(--muted);font:600 .75rem inherit;padding:5px 10px;border-radius:7px;cursor:pointer}
+.copy:hover{color:var(--text);border-color:var(--accent)}
+ol.plain{margin:0;padding-left:20px;color:var(--muted)}
+ol.plain li{margin-bottom:6px}
+
+/* trust */
+.trust{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media (max-width:800px){.trust{grid-template-columns:1fr}}
+.trust div{padding:22px;border-left:2px solid var(--accent);background:var(--panel);border-radius:0 12px 12px 0}
+.trust h3{margin:0 0 6px;font-size:1rem}
+.trust p{margin:0;color:var(--muted);font-size:.93rem}
+
+/* faq */
+.faq{max-width:780px}
+details{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-bottom:10px}
+summary{cursor:pointer;list-style:none;padding:18px 52px 18px 20px;font-weight:600;position:relative}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";position:absolute;right:20px;top:50%;transform:translateY(-50%);color:var(--accent);font-size:1.3rem;font-weight:400}
+details[open] summary::after{content:"−"}
+details p{margin:0;padding:0 20px 18px;color:var(--muted)}
+
+/* cta + footer */
+.cta{text-align:center;padding:88px 0}
+.cta h2{margin-bottom:12px}
+.cta p{color:var(--muted);margin:0 auto 28px;max-width:34em}
+.cta .btns{justify-content:center}
+footer{padding:32px 0 40px;color:var(--dim);font-size:.85rem}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px}
+footer a{color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#">Forti<b>SOAR</b> Playbook Builder</a>
+    <ul>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#install">Install</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="https://github.com/git-Jimit/fortisoar-playbook-builder">GitHub ↗</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <span class="pill"><i></i>Open source · v1.1.2 · MIT</span>
+      <h1>Build <span class="a">FortiSOAR playbooks</span> by describing them.</h1>
+      <p class="lead">A Claude AI skill that turns plain-English automation ideas into complete, importable FortiSOAR playbook JSON, then checks it with a static validator before you import.</p>
+      <div class="btns">
+        <a class="btn primary" href="#install">Install the skill</a>
+        <a class="btn" href="https://github.com/git-Jimit/fortisoar-playbook-builder">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          View on GitHub
+        </a>
+      </div>
+      <div class="meta"><span>Free</span><span>No data collected</span><span>Works in Claude Code &amp; Claude.ai</span></div>
+    </div>
+
+    <div class="flow" aria-hidden="true">
+      <svg viewBox="0 0 420 430">
+        <path class="edge" id="e1" d="M210 74 V128"/>
+        <path class="edge" id="e2" d="M210 186 V214 Q210 226 198 226 H118 Q106 226 106 238 V262"/>
+        <path class="edge" id="e3" d="M210 186 V214 Q210 226 222 226 H302 Q314 226 314 238 V262"/>
+        <path class="edge" d="M106 320 V346 Q106 358 118 358 H198 Q210 358 210 370 V372"/>
+        <path class="edge" d="M314 320 V346 Q314 358 302 358 H222 Q210 358 210 370"/>
+        <g class="node"><rect x="110" y="16" width="200" height="58" rx="10"/>
+          <path d="M138 56 L150 34 L162 56 Z" fill="none" stroke="#f0645a" stroke-width="2.4" stroke-linejoin="round"/><path d="M150 42 v7 M150 52.5 v.5" stroke="#f0645a" stroke-width="2.4" stroke-linecap="round"/>
+          <text x="176" y="44">Security alert</text><rect class="sub" x="176" y="52" width="90" height="5" rx="2.5"/></g>
+        <g class="node"><rect x="110" y="128" width="200" height="58" rx="10"/>
+          <path d="M150 143 L163 157 L150 171 L137 157 Z" fill="none" stroke="#f2b33d" stroke-width="2.4" stroke-linejoin="round"/>
+          <text x="176" y="156">Check conditions</text><rect class="sub" x="176" y="164" width="80" height="5" rx="2.5"/></g>
+        <g class="node"><rect x="16" y="262" width="180" height="58" rx="10"/>
+          <circle cx="46" cy="291" r="9" fill="none" stroke="#4a8fe7" stroke-width="2.4"/><circle cx="46" cy="291" r="3" fill="#4a8fe7"/>
+          <text x="66" y="290">Run actions</text><rect class="sub" x="66" y="298" width="70" height="5" rx="2.5"/></g>
+        <g class="node"><rect x="224" y="262" width="180" height="58" rx="10"/>
+          <rect x="245" y="280" width="16" height="22" rx="2" fill="none" stroke="#9db0bf" stroke-width="2"/><path d="M249 287h8M249 292h8M249 297h5" stroke="#9db0bf" stroke-width="1.8"/>
+          <text x="274" y="290">Enrich &amp; log</text><rect class="sub" x="274" y="298" width="70" height="5" rx="2.5"/></g>
+        <g class="node"><rect x="110" y="372" width="200" height="50" rx="10" style="stroke:#2ec4b6"/>
+          <circle cx="146" cy="397" r="11" fill="none" stroke="#3ad29f" stroke-width="2.4"/><path d="M140.5 397.5 l4 4 l7-8" fill="none" stroke="#3ad29f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="172" y="402">Resolved</text></g>
+        <circle class="pulse" r="4"><animateMotion dur="3.2s" repeatCount="indefinite" path="M210 74 V128 M210 186 V214 Q210 226 198 226 H118 Q106 226 106 238 V262"/></circle>      </svg>
+    </div>
+  </div>
+</header>
+
 <main>
-<h1>Forti<span>SOAR</span> Playbook Builder</h1>
-<p class="lead">A free, open-source Claude AI skill that builds, modifies, validates and reviews FortiSOAR playbooks as complete, importable JSON exports.</p>
-<div class="btns">
-  <a class="btn primary" href="https://github.com/git-Jimit/fortisoar-playbook-builder">View on GitHub</a>
-  <a class="btn" href="https://github.com/git-Jimit/fortisoar-playbook-builder/releases/latest">Download latest release</a>
-</div>
-<img class="hero" src="og-image.png" width="1280" height="640" alt="FortiSOAR Playbook Builder: a security alert flowing through condition checks, actions and enrichment to resolution">
+<section id="features">
+  <div class="wrap">
+    <p class="eyebrow">Features</p>
+    <h2>Covers the playbooks a SOC actually runs</h2>
+    <p class="sec-lead">Every rule in the skill was written after a real failure on a FortiSOAR appliance, and most of them are enforced by the bundled validator.</p>
+    <div class="grid">
+      <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#f0645a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17v.5"/></svg></div>
+        <h3>Alert triage &amp; response</h3><p>Playbooks that trigger on alert create or update, set severity, assign owners and close false positives.</p></div>
+      <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#2ec4b6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div>
+        <h3>IOC enrichment</h3><p>Look up IPs, domains, URLs and file hashes across threat-intel connectors and record the verdicts.</p></div>
+      <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#f2b33d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></div>
+        <h3>Phishing analysis</h3><p>Parse reported emails, extract and enrich indicators, and decide whether to quarantine.</p></div>
+      <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#4a8fe7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h10M4 18h6"/><circle cx="18" cy="16" r="3"/></svg></div>
+        <h3>FortiSIEM &amp; FortiAnalyzer</h3><p>Threat-hunting queries with correct event attribute names, built from a reference of 7,000+ FortiSIEM fields.</p></div>
+      <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#3ad29f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3z"/><path d="m9 12 2 2 4-4"/></svg></div>
+        <h3>Response actions</h3><p>Block, isolate and disable steps, with client approval links through manual input before anything runs.</p></div>
+      <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#9db0bf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-6-6z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg></div>
+        <h3>PDF &amp; HTML reports</h3><p>Generate incident reports inside FortiSOAR and attach them to the record automatically.</p></div>
+    </div>
+  </div>
+</section>
 
-<h2>What it does</h2>
-<p>Describe the playbook you want in plain English. Claude writes the FortiSOAR export, and a bundled static validator checks it before you import it. Every rule in the skill comes from a real failure on a FortiSOAR appliance.</p>
-<ul>
-  <li>Alert triage and incident response playbooks</li>
-  <li>IOC enrichment (IPs, domains, hashes, URLs) and phishing analysis</li>
-  <li>Threat hunting with FortiSIEM and FortiAnalyzer queries</li>
-  <li>Response actions such as block and isolate, with client approval links</li>
-  <li>PDF and HTML reports generated inside FortiSOAR</li>
-  <li>Reviewing, debugging and adapting existing playbook exports for another client or tenant</li>
-</ul>
+<section id="how" class="alt">
+  <div class="wrap">
+    <p class="eyebrow">How it works</p>
+    <h2>From idea to import in three steps</h2>
+    <p class="sec-lead">No hand-editing JSON. Describe the logic the way you would explain it to a colleague.</p>
+    <div class="steps">
+      <div class="step"><h3>Describe it</h3><p>Tell Claude what should trigger the playbook, what to check and what to do.</p></div>
+      <div class="step"><h3>Claude builds &amp; validates</h3><p>The skill writes the full export and runs the static validator to catch problems FortiSOAR would reject.</p></div>
+      <div class="step"><h3>Import into FortiSOAR</h3><p>Import the JSON file in FortiSOAR, add your connector configs, and run it.</p></div>
+    </div>
+    <div class="demo">
+      <div class="win">
+        <div class="win-bar"><i></i><i></i><i></i><span>You</span></div>
+        <div class="win-body prompt">Build a FortiSOAR playbook that runs on alert create, enriches every IP with FortiGuard and VirusTotal, and closes the alert as false positive if all are clean.</div>
+      </div>
+      <div class="win">
+        <div class="win-bar"><i></i><i></i><i></i><span>validate_playbook.py · bundled example</span></div>
+        <div class="win-body"><pre><span class="k">$</span> python3 validate_playbook.py <span class="s">reference-playbook-indicator-revalidation.json</span>
+  <span class="ok">ok</span>    Blocked Indicator Revalidation: 13 steps, 15 routes
+  <span class="k">INFO</span>  2 code-snippet step(s) - prefer native steps / Jinja where they can do the job
 
-<h2>Example prompt</h2>
-<blockquote>Build a FortiSOAR playbook that runs on alert create, enriches every IP with FortiGuard and VirusTotal, and closes the alert as false positive if all are clean.</blockquote>
+<span class="ok">0 error(s), 0 warning(s)</span></pre></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-<h2>Install in Claude Code</h2>
-<pre><code>/plugin marketplace add git-Jimit/fortisoar-playbook-builder
-/plugin install fortisoar-playbook-builder@fortisoar-skills</code></pre>
-<p>On Claude.ai or the Claude desktop app, zip the <code>skills/fortisoar-playbook-builder</code> folder from the repository and upload it under Customize → Skills. Full steps are in the <a href="https://github.com/git-Jimit/fortisoar-playbook-builder#install">README</a>.</p>
+<section id="install">
+  <div class="wrap">
+    <p class="eyebrow">Install</p>
+    <h2>Add it to Claude in under a minute</h2>
+    <p class="sec-lead">Pick the Claude app you use.</p>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" aria-controls="p-code" id="t-code">Claude Code</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="p-web" id="t-web">Claude.ai / desktop</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="p-man" id="t-man">Manual</button>
+    </div>
+    <div class="panel" role="tabpanel" id="p-code" aria-labelledby="t-code">
+      <p>Run these inside Claude Code:</p>
+      <div class="code"><pre>/plugin marketplace add git-Jimit/fortisoar-playbook-builder
+/plugin install fortisoar-playbook-builder@fortisoar-skills</pre><button class="copy">Copy</button></div>
+      <p>Then just ask for a FortiSOAR playbook. The skill loads automatically.</p>
+    </div>
+    <div class="panel" role="tabpanel" id="p-web" aria-labelledby="t-web" hidden>
+      <ol class="plain">
+        <li>Download the <a href="https://github.com/git-Jimit/fortisoar-playbook-builder/releases/latest">latest release</a> and unzip it.</li>
+        <li>Zip the <code>skills/fortisoar-playbook-builder</code> folder on its own.</li>
+        <li>In Claude, open <strong>Customize → Skills → Upload skill</strong> and choose that zip.</li>
+      </ol>
+    </div>
+    <div class="panel" role="tabpanel" id="p-man" aria-labelledby="t-man" hidden>
+      <p>Copy the skill into your personal Claude skills folder:</p>
+      <div class="code"><pre>git clone https://github.com/git-Jimit/fortisoar-playbook-builder.git
+cp -r fortisoar-playbook-builder/skills/fortisoar-playbook-builder ~/.claude/skills/</pre><button class="copy">Copy</button></div>
+      <p>Validate any existing export on its own:</p>
+      <div class="code"><pre>python3 skills/fortisoar-playbook-builder/scripts/validate_playbook.py my_playbook.json</pre><button class="copy">Copy</button></div>
+    </div>
+  </div>
+</section>
 
-<h2>Validate any playbook export</h2>
-<pre><code>python3 skills/fortisoar-playbook-builder/scripts/validate_playbook.py my_playbook.json</code></pre>
-<p>The scripts only read the file you pass them. They make no network calls and collect no data. See the <a href="https://github.com/git-Jimit/fortisoar-playbook-builder/blob/main/PRIVACY.md">privacy policy</a>.</p>
+<section class="alt">
+  <div class="wrap">
+    <p class="eyebrow">Privacy</p>
+    <h2>Safe to use on a SOC laptop</h2>
+    <p class="sec-lead">Nothing in the plugin phones home.</p>
+    <div class="trust">
+      <div><h3>No data collected</h3><p>No analytics, telemetry or remote endpoints. <a href="https://github.com/git-Jimit/fortisoar-playbook-builder/blob/main/PRIVACY.md">Read the privacy policy</a>.</p></div>
+      <div><h3>Scripts stay local</h3><p>The validator and config extractor only read the file you give them. No network calls, no credentials.</p></div>
+      <div><h3>Open source</h3><p>Every line is on GitHub under the MIT License. Read it before you install it.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap faq">
+    <p class="eyebrow">FAQ</p>
+    <h2>Questions</h2>
+    <details><summary>Is FortiSOAR Playbook Builder free?</summary><p>Yes. It is open source under the MIT License. You need your own Claude account to use it.</p></details>
+    <details><summary>Does the skill connect to my FortiSOAR instance?</summary><p>No. Claude writes a JSON export file, and you import it into FortiSOAR yourself. The bundled scripts make no network calls.</p></details>
+    <details><summary>Which Claude apps does it work in?</summary><p>Claude Code as a plugin, and Claude.ai or the Claude desktop app by uploading the skill folder.</p></details>
+    <details><summary>Can it review a playbook I already have?</summary><p>Yes. Give it an existing FortiSOAR playbook export and it can review, debug, extend or adapt it for another client or tenant.</p></details>
+    <details><summary>Is it made by Fortinet?</summary><p>No. It is an independent community project, not affiliated with or endorsed by Fortinet.</p></details>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="wrap">
+    <h2>Stop hand-writing playbook JSON.</h2>
+    <p>Install the skill, describe your next playbook, and import it the same day.</p>
+    <div class="btns">
+      <a class="btn primary" href="#install">Install the skill</a>
+      <a class="btn" href="https://github.com/git-Jimit/fortisoar-playbook-builder">★ Star on GitHub</a>
+    </div>
+  </div>
+</section>
+</main>
 
 <footer>
-  MIT License © 2026 <a href="https://github.com/git-Jimit">Jimit Patel</a> ·
-  <a href="https://github.com/git-Jimit/fortisoar-playbook-builder/issues">Report an issue</a><br>
-  Not affiliated with or endorsed by Fortinet. FortiSOAR, FortiSIEM and FortiAnalyzer are trademarks of Fortinet, Inc.
+  <div class="wrap">
+    <div>MIT License © 2026 <a href="https://github.com/git-Jimit">Jimit Patel</a> · <a href="https://github.com/git-Jimit/fortisoar-playbook-builder/issues">Report an issue</a></div>
+    <div>Not affiliated with or endorsed by Fortinet. FortiSOAR, FortiSIEM and FortiAnalyzer are trademarks of Fortinet, Inc.</div>
+  </div>
 </footer>
-</main>
+
+<script>
+document.querySelectorAll('.tab').forEach(function (tab) {
+  tab.addEventListener('click', function () {
+    document.querySelectorAll('.tab').forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', on);
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+  });
+});
+document.querySelectorAll('.copy').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var text = btn.previousElementSibling.textContent;
+    navigator.clipboard.writeText(text).then(function () {
+      btn.textContent = 'Copied';
+      setTimeout(function () { btn.textContent = 'Copy'; }, 1500);
+    });
+  });
+});
+</script>
 </body>
 </html>
