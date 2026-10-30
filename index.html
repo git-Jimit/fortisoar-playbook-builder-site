@@ -311,6 +311,7 @@ footer a{color:var(--muted)}
     <p class="sec-lead">Pick the Claude app you use.</p>
     <div class="tabs" role="tablist">
       <button class="tab" role="tab" aria-selected="true" aria-controls="p-code" id="t-code">Claude Code</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="p-npx" id="t-npx">npx skills</button>
       <button class="tab" role="tab" aria-selected="false" aria-controls="p-web" id="t-web">Claude.ai / desktop</button>
       <button class="tab" role="tab" aria-selected="false" aria-controls="p-man" id="t-man">Manual</button>
     </div>
@@ -319,6 +320,11 @@ footer a{color:var(--muted)}
       <div class="code"><pre>/plugin marketplace add git-Jimit/fortisoar-playbook-builder
 /plugin install fortisoar-playbook-builder@fortisoar-skills</pre><button class="copy">Copy</button></div>
       <p>Then just ask for a FortiSOAR playbook. The skill loads automatically.</p>
+    </div>
+    <div class="panel" role="tabpanel" id="p-npx" aria-labelledby="t-npx" hidden>
+      <p>Install with the open <a href="https://skills.sh">skills</a> CLI (needs Node.js):</p>
+      <div class="code"><pre>npx skills add git-Jimit/fortisoar-playbook-builder</pre><button class="copy">Copy</button></div>
+      <p>It asks which agent to install into, such as Claude Code. The skill then loads automatically.</p>
     </div>
     <div class="panel" role="tabpanel" id="p-web" aria-labelledby="t-web" hidden>
       <ol class="plain">
