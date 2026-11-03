@@ -7,9 +7,9 @@
 <meta name="description" content="Free, open-source Claude AI skill that builds, validates and reviews FortiSOAR playbooks as importable JSON: alert triage, incident response, phishing, IOC enrichment, FortiSIEM queries and PDF reports.">
 <meta name="keywords" content="FortiSOAR, FortiSOAR playbook, FortiSOAR playbook builder, Claude skill, Claude plugin, SOAR automation, SOC automation, FortiSIEM, incident response, Fortinet">
 <meta name="author" content="Jimit Patel">
-<meta name="theme-color" content="#0b131b">
+<meta name="theme-color" content="#07080c">
 <link rel="canonical" href="https://git-jimit.github.io/fortisoar-playbook-builder-site/">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b131b'/%3E%3Cpath d='M9 8h14v4H13v3h8v4h-8v5H9z' fill='%232ec4b6'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2307080c'/%3E%3Cpath d='M9 8h14v4H13v3h8v4h-8v5H9z' fill='%23ff4a3d'/%3E%3C/svg%3E">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="FortiSOAR Playbook Builder">
 <meta property="og:title" content="FortiSOAR Playbook Builder: Claude AI Skill">
@@ -20,6 +20,9 @@
 <meta property="og:image:height" content="640">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://git-jimit.github.io/fortisoar-playbook-builder-site/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -66,159 +69,224 @@
 </script>
 <style>
 :root{
-  --bg:#0b131b; --bg2:#0f1922; --panel:#131f2a; --panel2:#172633; --line:#22323f; --line2:#2d4152;
-  --text:#e9eff4; --muted:#9db0bf; --dim:#6f8597;
-  --accent:#2ec4b6; --accent-ink:#04201d; --red:#f0645a; --amber:#f2b33d; --blue:#4a8fe7; --green:#3ad29f;
-  --mono:ui-monospace,SFMono-Regular,"Cascadia Code",Consolas,monospace;
+  --bg:#07080c; --bg2:#0c0e14; --panel:#11141c; --panel2:#171b25; --line:#1f2430; --line2:#2c3342;
+  --text:#eef0f4; --muted:#a3a9b6; --dim:#6c7383;
+  --red:#ff4a3d; --red2:#ff7a6e; --red-ink:#1a0402; --green:#3ad29f; --amber:#f2b33d; --blue:#6ea8ff;
+  --display:"Oswald","Arial Narrow",Impact,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"Cascadia Code",Consolas,monospace;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
-a{color:var(--accent);text-decoration:none}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--red2);text-decoration:none}
 a:hover{text-decoration:underline}
-.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
-code{font-family:var(--mono);font-size:.9em}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+@media (max-width:600px){.wrap{padding:0 16px}}
+code{font-family:var(--mono);font-size:.88em}
+pre{scrollbar-width:thin;scrollbar-color:#2c3342 transparent}
+pre::-webkit-scrollbar{height:6px}pre::-webkit-scrollbar-thumb{background:#2c3342;border-radius:3px}pre::-webkit-scrollbar-track{background:transparent}
 
 /* nav */
-nav{position:sticky;top:0;z-index:10;background:rgba(11,19,27,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
-.brand{font-weight:700;color:var(--text);letter-spacing:-.01em}
-.brand b{color:var(--accent);font-weight:700}
-nav ul{display:flex;gap:24px;list-style:none;margin:0;padding:0;font-size:.92rem}
-nav ul a{color:var(--muted)}
-nav ul a:hover{color:var(--text);text-decoration:none}
-@media (max-width:720px){nav ul li:not(:last-child){display:none}}
+nav{position:sticky;top:0;z-index:20;background:rgba(7,8,12,.78);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:64px}
+nav .left,nav .right{display:flex;gap:28px;font:500 .78rem var(--mono);letter-spacing:.12em;text-transform:uppercase}
+nav .right{justify-content:flex-end;align-items:center}
+nav .left a,nav .right a{color:var(--muted)}
+nav .left a:hover,nav .right a:hover{color:var(--text);text-decoration:none}
+.brand{font:500 1.05rem/1 var(--display);letter-spacing:.08em;text-transform:uppercase;color:var(--text);text-align:center}
+.brand b{color:var(--red);font-weight:500}
+.nav-cta{border:1px solid var(--line2);padding:8px 14px;border-radius:6px;color:var(--text)!important;background:var(--panel)}
+.nav-cta:hover{border-color:var(--red)}
+@media (max-width:860px){nav .wrap{grid-template-columns:1fr auto}nav .left{display:none}.brand{text-align:left}nav .right a:not(.nav-cta){display:none}}
 
 /* hero */
-.hero{position:relative;overflow:hidden;padding:88px 0 72px;border-bottom:1px solid var(--line)}
-.hero::before{content:"";position:absolute;inset:0;background:
-  radial-gradient(600px 300px at 85% 30%,rgba(46,196,182,.12),transparent 70%),
-  radial-gradient(1px 1px at 1px 1px,rgba(157,176,191,.18) 1px,transparent 0) 0 0/22px 22px;
-  mask-image:linear-gradient(180deg,#000 60%,transparent);pointer-events:none}
-.hero .wrap{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
-@media (max-width:900px){.hero .wrap{grid-template-columns:1fr}.hero{padding:56px 0 48px}}
-.pill{display:inline-flex;align-items:center;gap:8px;padding:5px 12px;border:1px solid var(--line2);border-radius:999px;font-size:.8rem;color:var(--muted);background:var(--panel)}
-.pill i{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(58,210,159,.18)}
-h1{font-size:clamp(2.4rem,6vw,4rem);line-height:1.04;letter-spacing:-.03em;margin:20px 0 18px}
-h1 .a{color:var(--accent)}
-.lead{font-size:1.18rem;color:var(--muted);max-width:34em;margin:0 0 30px}
+.hero{position:relative;padding:72px 0 40px;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;background:
+  radial-gradient(700px 420px at 78% 42%,rgba(255,74,61,.14),transparent 70%),
+  linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px) 0 0/100% 64px,
+  linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px) 0 0/64px 100%;
+  mask-image:linear-gradient(180deg,#000 55%,transparent)}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.hero .wrap > *{min-width:0}
+@media (max-width:960px){.hero .wrap{grid-template-columns:1fr}.hero{padding:44px 0 24px}}
+@media (max-width:600px){.tag{font-size:.62rem;letter-spacing:.1em}.qi-tabs button{font-size:.66rem}}
+.tag{display:inline-flex;align-items:center;gap:10px;font:500 .74rem var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.tag i{width:8px;height:8px;background:var(--red);box-shadow:0 0 12px var(--red)}
+h1{font:300 clamp(3.4rem,8.4vw,6.6rem)/.95 var(--display);letter-spacing:-.01em;text-transform:none;margin:22px 0 22px}
+h1 em{font-style:normal;color:var(--red);font-weight:400}
+.lead{font-size:1.14rem;color:var(--muted);max-width:32em;margin:0 0 28px}
 .btns{display:flex;flex-wrap:wrap;gap:12px}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:10px;border:1px solid var(--line2);color:var(--text);font-weight:600;font-size:.95rem;background:var(--panel)}
-.btn:hover{text-decoration:none;border-color:var(--accent)}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-.btn.primary:hover{filter:brightness(1.08)}
-.btn svg{width:18px;height:18px}
-.meta{display:flex;flex-wrap:wrap;gap:18px;margin-top:28px;font-size:.85rem;color:var(--dim)}
-.meta span::before{content:"✓ ";color:var(--accent)}
+.btn{display:inline-flex;align-items:center;gap:9px;padding:12px 20px;border-radius:6px;border:1px solid var(--line2);color:var(--text);font:600 .78rem var(--mono);letter-spacing:.1em;text-transform:uppercase;background:var(--panel)}
+.btn:hover{text-decoration:none;border-color:var(--red)}
+.btn.primary{background:var(--red);border-color:var(--red);color:#fff}
+.btn.primary:hover{background:#ff5f53}
+.btn svg{width:16px;height:16px}
 
-/* flow diagram */
-.flow{position:relative;max-width:420px;justify-self:center;width:100%}
-.flow svg{width:100%;height:auto;display:block}
-.node rect{fill:var(--panel);stroke:var(--line2)}
-.node text{fill:var(--text);font:600 14px Inter,system-ui,sans-serif}
-.node .sub{fill:var(--line2)}
-.edge{fill:none;stroke:#4f6577;stroke-width:2}
-.pulse{fill:var(--accent)}
+/* hero install box */
+.qi{margin-top:30px;max-width:540px}
+.qi-label{font:600 .7rem var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
+.qi-tabs{display:flex;border:1px solid var(--line2);border-bottom:none;border-radius:8px 8px 0 0;overflow:hidden}
+.qi-tabs button{flex:1;appearance:none;border:0;border-right:1px solid var(--line2);background:var(--panel);color:var(--muted);font:600 .74rem var(--mono);letter-spacing:.06em;padding:10px 6px;cursor:pointer}
+.qi-tabs button:last-child{border-right:0}
+.qi-tabs button[aria-selected="true"]{background:var(--red);color:#fff}
+.qi-box{position:relative;border:1px solid var(--line2);border-radius:0 0 8px 8px;background:#0a0b10}
+.qi-box pre{margin:0;padding:14px 64px 14px 14px;font:.8rem/1.7 var(--mono);color:var(--text);overflow-x:auto;white-space:pre}
+
+/* hero art */
+.art{position:relative;width:100%;max-width:600px;justify-self:center;aspect-ratio:1/1}
+.art svg{width:100%;height:100%;display:block;overflow:visible}
+.art .corner{position:absolute;width:18px;height:18px;border-color:var(--line2);border-style:solid}
+.art .c1{top:0;left:0;border-width:1px 0 0 1px}.art .c2{top:0;right:0;border-width:1px 1px 0 0}
+.art .c3{bottom:0;left:0;border-width:0 0 1px 1px}.art .c4{bottom:0;right:0;border-width:0 1px 1px 0}
+.art .readout{position:absolute;font:.66rem/1.5 var(--mono);color:var(--dim);letter-spacing:.08em}
+.art .r1{top:10px;left:28px}.art .r2{bottom:10px;right:28px;text-align:right}
+.art .r2 b{color:var(--green);font-weight:600}
+.strand{fill:none;stroke-linecap:round}
+.spin{transform-origin:300px 300px;animation:spin 140s linear infinite}
+.spin.rev{animation-duration:200s;animation-direction:reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+.n rect{fill:#0d0f15;stroke:#3a4152}
+.n text{fill:var(--text);font:600 11px "JetBrains Mono",monospace;letter-spacing:.04em}
+.e{fill:none;stroke:#4a5163;stroke-width:1.4}
+.flowline{fill:none;stroke:var(--red);stroke-width:1.6;stroke-dasharray:4 10;animation:dash 1.6s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-28}}
+
+/* ticker */
+.ticker{border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;background:var(--bg2)}
+.ticker-track{display:flex;width:max-content;animation:tick 40s linear infinite}
+.ticker span{font:400 1.05rem/1 var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:18px 26px;white-space:nowrap}
+.ticker span::after{content:"✦";color:var(--red);margin-left:52px}
+@keyframes tick{to{transform:translateX(-50%)}}
 
 /* sections */
-section{padding:84px 0;border-bottom:1px solid var(--line)}
-section.alt{background:var(--bg2)}
-.eyebrow{font:600 .75rem var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:0 0 10px}
-h2{font-size:clamp(1.7rem,3.5vw,2.3rem);letter-spacing:-.02em;line-height:1.15;margin:0 0 14px}
-.sec-lead{color:var(--muted);max-width:40em;margin:0 0 44px;font-size:1.05rem}
+section{padding:110px 0;position:relative}
+@media (max-width:700px){section{padding:72px 0}}
+.kicker{font:600 .72rem var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--red);margin:0 0 14px}
+h2{font:300 clamp(2.6rem,6vw,4.6rem)/1 var(--display);letter-spacing:-.005em;margin:0 0 18px}
+h2 sup{color:var(--red);font-size:.4em;vertical-align:top;margin-left:4px}
+.sec-lead{color:var(--muted);max-width:40em;margin:0 0 54px;font-size:1.06rem}
 
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-@media (max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:600px){.grid{grid-template-columns:1fr}}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:24px;transition:border-color .2s,transform .2s}
-.card:hover{border-color:var(--line2);transform:translateY(-2px)}
-.card .ic{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;margin-bottom:16px;background:var(--panel2);border:1px solid var(--line2)}
-.card .ic svg{width:20px;height:20px}
-.card h3{margin:0 0 6px;font-size:1.05rem}
-.card p{margin:0;color:var(--muted);font-size:.94rem}
+/* showcase window */
+.show{border:1px solid var(--line2);border-radius:14px;background:linear-gradient(180deg,#10131b,#0a0c11);overflow:hidden;box-shadow:0 40px 120px -40px rgba(255,74,61,.35)}
+.show-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line);font:.74rem var(--mono);color:var(--dim)}
+.show-bar i{width:10px;height:10px;border-radius:50%;background:var(--line2)}
+.show-bar span{margin-left:10px}
+.show-body{display:grid;grid-template-columns:220px 1fr;min-height:420px}
+@media (max-width:820px){.show-body{grid-template-columns:1fr}.show-side{display:none}}
+.show-side{border-right:1px solid var(--line);padding:18px 14px;font:.78rem/1.9 var(--mono);color:var(--dim)}
+.show-side b{display:block;color:var(--muted);font-weight:600;margin:6px 0 4px;letter-spacing:.12em;font-size:.68rem}
+.show-side .on{color:var(--text);background:var(--panel2);border-radius:6px;padding:2px 8px;margin:0 -8px}
+.chat{padding:26px clamp(16px,4vw,42px);display:flex;flex-direction:column;gap:18px}
+.msg-user{align-self:flex-end;max-width:520px;background:var(--panel2);border:1px solid var(--line2);border-radius:12px 12px 2px 12px;padding:14px 16px;font-size:.95rem}
+.msg-ai{max-width:720px;font-size:.95rem;color:var(--muted)}
+.msg-ai p{margin:0 0 10px}
+.msg-ai strong{color:var(--text)}
+.term{background:#07080c;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:6px 0 12px}
+.term pre{margin:0;font:.78rem/1.7 var(--mono);color:var(--muted);white-space:pre-wrap;word-break:break-word}
+.k{color:var(--blue)}.s{color:#a5e5a0}.ok{color:var(--green)}.dim{color:var(--dim)}
+.file{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--line2);border-radius:8px;padding:9px 14px;font:.8rem var(--mono);color:var(--text);background:var(--panel)}
+.file i{width:22px;height:26px;border:1.5px solid var(--red);border-radius:3px;position:relative}
+.file i::after{content:"{}";position:absolute;inset:0;display:grid;place-items:center;font:700 .6rem var(--mono);color:var(--red)}
 
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;counter-reset:s}
-@media (max-width:800px){.steps{grid-template-columns:1fr}}
-.step{position:relative;padding:26px 24px 24px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
-.step::before{counter-increment:s;content:"0" counter(s);font:700 .8rem var(--mono);color:var(--accent);display:block;margin-bottom:12px;letter-spacing:.1em}
-.step h3{margin:0 0 6px;font-size:1.05rem}
-.step p{margin:0;color:var(--muted);font-size:.94rem}
+/* numbered features */
+.feats{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+@media (max-width:960px){.feats{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:620px){.feats{grid-template-columns:1fr}}
+.feat{border:1px solid var(--line);border-radius:12px;background:var(--panel);overflow:hidden;transition:border-color .25s,transform .25s}
+.feat:hover{border-color:var(--red);transform:translateY(-3px)}
+.feat .pic{height:150px;border-bottom:1px solid var(--line);background:#0a0b10;position:relative;overflow:hidden}
+.feat .pic svg{position:absolute;inset:0;width:100%;height:100%}
+.feat .txt{padding:20px 22px 24px}
+.feat .num{font:600 .7rem var(--mono);letter-spacing:.16em;color:var(--red);text-transform:uppercase}
+.feat h3{font:400 1.6rem/1.1 var(--display);margin:8px 0 8px}
+.feat p{margin:0;color:var(--muted);font-size:.93rem}
 
-/* prompt demo */
-.demo{margin-top:36px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
-@media (max-width:800px){.demo{grid-template-columns:1fr}}
-.win{border:1px solid var(--line2);border-radius:14px;background:#0a1118;overflow:hidden}
-.win-bar{display:flex;align-items:center;gap:7px;padding:10px 14px;border-bottom:1px solid var(--line);font:.78rem var(--mono);color:var(--dim)}
-.win-bar i{width:10px;height:10px;border-radius:50%;background:var(--line2)}
-.win-bar span{margin-left:8px}
-.win-body{padding:18px;font-size:.95rem}
-.win-body.prompt{color:var(--text)}
-.win-body pre{margin:0;font:.82rem/1.6 var(--mono);color:var(--muted);white-space:pre-wrap;word-break:break-word}
-.k{color:#7cc7ff}.s{color:#a5e5a0}.ok{color:var(--green)}
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line2)}
+@media (max-width:820px){.steps{grid-template-columns:1fr}}
+.step{padding:30px 28px 10px 0}
+.step + .step{padding-left:28px;border-left:1px solid var(--line)}
+@media (max-width:820px){.step + .step{padding-left:0;border-left:0;border-top:1px solid var(--line)}}
+.step .big{font:300 5rem/1 var(--display);color:transparent;-webkit-text-stroke:1px var(--red)}
+.step h3{font:400 1.7rem/1.1 var(--display);margin:14px 0 8px}
+.step p{margin:0;color:var(--muted)}
 
 /* install */
-.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:-1px;position:relative}
-.tab{appearance:none;border:1px solid var(--line);border-bottom:none;background:transparent;color:var(--muted);padding:10px 16px;border-radius:10px 10px 0 0;font:600 .9rem inherit;cursor:pointer}
-.tab[aria-selected="true"]{background:var(--panel);color:var(--text);border-color:var(--line2)}
-.panel{border:1px solid var(--line2);border-radius:0 14px 14px 14px;background:var(--panel);padding:24px}
+.tabs{display:flex;gap:0;flex-wrap:wrap;border:1px solid var(--line2);border-bottom:none;border-radius:10px 10px 0 0;overflow:hidden;width:fit-content;max-width:100%}
+.tab{appearance:none;border:0;border-right:1px solid var(--line2);background:var(--panel);color:var(--muted);padding:12px 18px;font:600 .76rem var(--mono);letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.tab:last-child{border-right:0}
+.tab[aria-selected="true"]{background:var(--red);color:#fff}
+.panel{border:1px solid var(--line2);border-radius:0 12px 12px 12px;background:var(--panel);padding:26px}
 .panel[hidden]{display:none}
 .panel p{color:var(--muted);margin:0 0 14px}
 .panel p:last-child{margin-bottom:0}
-.code{position:relative;background:#0a1118;border:1px solid var(--line);border-radius:10px;margin:0 0 14px}
-.code pre{margin:0;padding:16px 64px 16px 16px;overflow-x:auto;font:.86rem/1.7 var(--mono);color:var(--text)}
-.copy{position:absolute;top:8px;right:8px;border:1px solid var(--line2);background:var(--panel2);color:var(--muted);font:600 .75rem inherit;padding:5px 10px;border-radius:7px;cursor:pointer}
-.copy:hover{color:var(--text);border-color:var(--accent)}
+.code{position:relative;background:#0a0b10;border:1px solid var(--line);border-radius:8px;margin:0 0 14px}
+.code pre{margin:0;padding:16px 70px 16px 16px;overflow-x:auto;font:.84rem/1.7 var(--mono);color:var(--text)}
+.copy{position:absolute;top:8px;right:8px;border:1px solid var(--line2);background:var(--panel2);color:var(--muted);font:600 .68rem var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:6px 10px;border-radius:5px;cursor:pointer}
+.copy:hover{color:var(--text);border-color:var(--red)}
 ol.plain{margin:0;padding-left:20px;color:var(--muted)}
 ol.plain li{margin-bottom:6px}
 
 /* trust */
-.trust{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-@media (max-width:800px){.trust{grid-template-columns:1fr}}
-.trust div{padding:22px;border-left:2px solid var(--accent);background:var(--panel);border-radius:0 12px 12px 0}
-.trust h3{margin:0 0 6px;font-size:1rem}
+.trust{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+@media (max-width:820px){.trust{grid-template-columns:1fr}}
+.trust div{padding:30px 28px;background:var(--panel)}
+.trust div + div{border-left:1px solid var(--line)}
+@media (max-width:820px){.trust div + div{border-left:0;border-top:1px solid var(--line)}}
+.trust .num{font:600 .7rem var(--mono);letter-spacing:.16em;color:var(--red)}
+.trust h3{font:400 1.5rem/1.1 var(--display);margin:10px 0 8px}
 .trust p{margin:0;color:var(--muted);font-size:.93rem}
 
 /* faq */
-.faq{max-width:780px}
-details{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-bottom:10px}
-summary{cursor:pointer;list-style:none;padding:18px 52px 18px 20px;font-weight:600;position:relative}
+.faq{display:grid;grid-template-columns:1fr 1.6fr;gap:48px}
+@media (max-width:860px){.faq{grid-template-columns:1fr;gap:10px}}
+details{border-top:1px solid var(--line2)}
+details:last-child{border-bottom:1px solid var(--line2)}
+summary{cursor:pointer;list-style:none;padding:22px 44px 22px 0;font:400 1.3rem/1.25 var(--display);letter-spacing:.01em;position:relative}
 summary::-webkit-details-marker{display:none}
-summary::after{content:"+";position:absolute;right:20px;top:50%;transform:translateY(-50%);color:var(--accent);font-size:1.3rem;font-weight:400}
+summary::after{content:"+";position:absolute;right:4px;top:50%;transform:translateY(-50%);color:var(--red);font:300 1.8rem var(--display)}
 details[open] summary::after{content:"−"}
-details p{margin:0;padding:0 20px 18px;color:var(--muted)}
+details p{margin:0;padding:0 0 22px;color:var(--muted)}
 
 /* cta + footer */
-.cta{text-align:center;padding:88px 0}
-.cta h2{margin-bottom:12px}
-.cta p{color:var(--muted);margin:0 auto 28px;max-width:34em}
+.cta{text-align:center;padding:130px 0;overflow:hidden;border-top:1px solid var(--line)}
+.cta::before{content:"";position:absolute;left:50%;top:50%;width:900px;height:900px;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(255,74,61,.16),transparent 60%);pointer-events:none}
+.cta .wrap{position:relative}
+.cta h2{font-size:clamp(2.8rem,7vw,5.6rem)}
+.cta p{color:var(--muted);margin:0 auto 30px;max-width:34em}
 .cta .btns{justify-content:center}
-footer{padding:32px 0 40px;color:var(--dim);font-size:.85rem}
+footer{padding:30px 0 40px;color:var(--dim);font-size:.82rem;border-top:1px solid var(--line)}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px}
 footer a{color:var(--muted)}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}.reveal{opacity:1;transform:none}}
 </style>
 </head>
 <body>
 
 <nav>
   <div class="wrap">
+    <div class="left">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#faq">FAQ</a>
+    </div>
     <a class="brand" href="#">Forti<b>SOAR</b> Playbook Builder</a>
-    <ul>
-      <li><a href="#features">Features</a></li>
-      <li><a href="#how">How it works</a></li>
-      <li><a href="#install">Install</a></li>
-      <li><a href="#faq">FAQ</a></li>
-      <li><a href="https://github.com/git-Jimit/fortisoar-playbook-builder">GitHub ↗</a></li>
-    </ul>
+    <div class="right">
+      <a href="https://github.com/git-Jimit/fortisoar-playbook-builder">GitHub ↗</a>
+      <a class="nav-cta" href="#install">Install</a>
+    </div>
   </div>
 </nav>
 
 <header class="hero">
   <div class="wrap">
     <div>
-      <span class="pill"><i></i>Open source · v1.1.2 · MIT</span>
-      <h1>Build <span class="a">FortiSOAR playbooks</span> by describing them.</h1>
-      <p class="lead">A Claude AI skill that turns plain-English automation ideas into complete, importable FortiSOAR playbook JSON, then checks it with a static validator before you import.</p>
+      <span class="tag"><i></i>Open source · v1.1.2 · MIT · Claude skill</span>
+      <h1>Describe it.<br><em>Import it.</em></h1>
+      <p class="lead">Build FortiSOAR playbooks by describing them. A Claude AI skill that turns plain-English automation ideas into complete, importable playbook JSON, then checks it with a static validator before you import.</p>
       <div class="btns">
         <a class="btn primary" href="#install">Install the skill</a>
         <a class="btn" href="https://github.com/git-Jimit/fortisoar-playbook-builder">
@@ -226,90 +294,121 @@ footer a{color:var(--muted)}
           View on GitHub
         </a>
       </div>
-      <div class="meta"><span>Free</span><span>No data collected</span><span>Works in Claude &amp; any Agent Skills agent</span></div>
+      <div class="qi">
+        <div class="qi-label">Quick install</div>
+        <div class="qi-tabs" role="tablist">
+          <button role="tab" aria-selected="true" data-cmd="/plugin marketplace add git-Jimit/fortisoar-playbook-builder&#10;/plugin install fortisoar-playbook-builder@fortisoar-skills">Claude Code</button>
+          <button role="tab" aria-selected="false" data-cmd="npx skills add git-Jimit/fortisoar-playbook-builder">npx skills</button>
+          <button role="tab" aria-selected="false" data-cmd="git clone https://github.com/git-Jimit/fortisoar-playbook-builder.git&#10;cp -r fortisoar-playbook-builder/skills/fortisoar-playbook-builder ~/.agents/skills/">Other agents</button>
+        </div>
+        <div class="qi-box"><pre id="qi-cmd">/plugin marketplace add git-Jimit/fortisoar-playbook-builder
+/plugin install fortisoar-playbook-builder@fortisoar-skills</pre><button class="copy">Copy</button></div>
+      </div>
     </div>
 
-    <div class="flow" aria-hidden="true">
-      <svg viewBox="0 0 420 430">
-        <path class="edge" id="e1" d="M210 74 V128"/>
-        <path class="edge" id="e2" d="M210 186 V214 Q210 226 198 226 H118 Q106 226 106 238 V262"/>
-        <path class="edge" id="e3" d="M210 186 V214 Q210 226 222 226 H302 Q314 226 314 238 V262"/>
-        <path class="edge" d="M106 320 V346 Q106 358 118 358 H198 Q210 358 210 370 V372"/>
-        <path class="edge" d="M314 320 V346 Q314 358 302 358 H222 Q210 358 210 370"/>
-        <g class="node"><rect x="110" y="16" width="200" height="58" rx="10"/>
-          <path d="M138 56 L150 34 L162 56 Z" fill="none" stroke="#f0645a" stroke-width="2.4" stroke-linejoin="round"/><path d="M150 42 v7 M150 52.5 v.5" stroke="#f0645a" stroke-width="2.4" stroke-linecap="round"/>
-          <text x="176" y="44">Security alert</text><rect class="sub" x="176" y="52" width="90" height="5" rx="2.5"/></g>
-        <g class="node"><rect x="110" y="128" width="200" height="58" rx="10"/>
-          <path d="M150 143 L163 157 L150 171 L137 157 Z" fill="none" stroke="#f2b33d" stroke-width="2.4" stroke-linejoin="round"/>
-          <text x="176" y="156">Check conditions</text><rect class="sub" x="176" y="164" width="80" height="5" rx="2.5"/></g>
-        <g class="node"><rect x="16" y="262" width="180" height="58" rx="10"/>
-          <circle cx="46" cy="291" r="9" fill="none" stroke="#4a8fe7" stroke-width="2.4"/><circle cx="46" cy="291" r="3" fill="#4a8fe7"/>
-          <text x="66" y="290">Run actions</text><rect class="sub" x="66" y="298" width="70" height="5" rx="2.5"/></g>
-        <g class="node"><rect x="224" y="262" width="180" height="58" rx="10"/>
-          <rect x="245" y="280" width="16" height="22" rx="2" fill="none" stroke="#9db0bf" stroke-width="2"/><path d="M249 287h8M249 292h8M249 297h5" stroke="#9db0bf" stroke-width="1.8"/>
-          <text x="274" y="290">Enrich &amp; log</text><rect class="sub" x="274" y="298" width="70" height="5" rx="2.5"/></g>
-        <g class="node"><rect x="110" y="372" width="200" height="50" rx="10" style="stroke:#2ec4b6"/>
-          <circle cx="146" cy="397" r="11" fill="none" stroke="#3ad29f" stroke-width="2.4"/><path d="M140.5 397.5 l4 4 l7-8" fill="none" stroke="#3ad29f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-          <text x="172" y="402">Resolved</text></g>
-        <circle class="pulse" r="4"><animateMotion dur="3.2s" repeatCount="indefinite" path="M210 74 V128 M210 186 V214 Q210 226 198 226 H118 Q106 226 106 238 V262"/></circle>      </svg>
+    <div class="art" aria-hidden="true">
+      <span class="corner c1"></span><span class="corner c2"></span><span class="corner c3"></span><span class="corner c4"></span>
+      <div class="readout r1">PLAYBOOK.JSON<br>TRIGGER: ALERT_CREATE</div>
+      <div class="readout r2">VALIDATOR<br><b>0 ERRORS · 0 WARNINGS</b></div>
+      <svg viewBox="0 0 600 600">
+        <g id="rings"></g>
+        <g class="spin" id="strandsA"></g>
+        <g class="spin rev" id="strandsB"></g>
+        <circle cx="300" cy="300" r="150" fill="#08090d" stroke="#2c3342"/>
+        <circle cx="300" cy="300" r="150" fill="none" stroke="#ff4a3d" stroke-width="1.2" stroke-dasharray="2 8" opacity=".8"/>
+        <!-- playbook flow -->
+        <path class="e" d="M300 222 V258"/>
+        <path class="e" d="M300 300 V312 H240 V340"/>
+        <path class="e" d="M300 300 V312 H360 V340"/>
+        <path class="e" d="M240 366 V382 H300 V392"/>
+        <path class="e" d="M360 366 V382 H300"/>
+        <path class="flowline" d="M300 222 V258 M300 300 V312 H240 V340 M240 366 V382 H300 V392"/>
+        <g class="n"><rect x="240" y="196" width="120" height="26" rx="5" style="stroke:#ff4a3d"/><text x="300" y="213" text-anchor="middle">ALERT</text></g>
+        <g class="n"><path d="M300 258 L322 279 L300 300 L278 279 Z" fill="#0d0f15" stroke="#f2b33d"/><text x="300" y="283" text-anchor="middle" style="font-size:9px">IF</text></g>
+        <g class="n"><rect x="196" y="340" width="88" height="26" rx="5"/><text x="240" y="357" text-anchor="middle">ENRICH</text></g>
+        <g class="n"><rect x="316" y="340" width="88" height="26" rx="5"/><text x="360" y="357" text-anchor="middle">BLOCK</text></g>
+        <g class="n"><rect x="250" y="392" width="100" height="26" rx="5" style="stroke:#3ad29f"/><text x="300" y="409" text-anchor="middle" style="fill:#3ad29f">RESOLVED</text></g>
+      </svg>
     </div>
   </div>
 </header>
 
-<main>
-<section id="features">
-  <div class="wrap">
-    <p class="eyebrow">Features</p>
-    <h2>Covers the playbooks a SOC actually runs</h2>
-    <p class="sec-lead">Every rule in the skill was written after a real failure on a FortiSOAR appliance, and most of them are enforced by the bundled validator.</p>
-    <div class="grid">
-      <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#f0645a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17v.5"/></svg></div>
-        <h3>Alert triage &amp; response</h3><p>Playbooks that trigger on alert create or update, set severity, assign owners and close false positives.</p></div>
-      <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#2ec4b6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div>
-        <h3>IOC enrichment</h3><p>Look up IPs, domains, URLs and file hashes across threat-intel connectors and record the verdicts.</p></div>
-      <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#f2b33d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></div>
-        <h3>Phishing analysis</h3><p>Parse reported emails, extract and enrich indicators, and decide whether to quarantine.</p></div>
-      <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#4a8fe7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h10M4 18h6"/><circle cx="18" cy="16" r="3"/></svg></div>
-        <h3>FortiSIEM &amp; FortiAnalyzer</h3><p>Threat-hunting queries with correct event attribute names, built from a reference of 7,000+ FortiSIEM fields.</p></div>
-      <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#3ad29f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3z"/><path d="m9 12 2 2 4-4"/></svg></div>
-        <h3>Response actions</h3><p>Block, isolate and disable steps, with client approval links through manual input before anything runs.</p></div>
-      <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#9db0bf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-6-6z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg></div>
-        <h3>PDF &amp; HTML reports</h3><p>Generate incident reports inside FortiSOAR and attach them to the record automatically.</p></div>
-    </div>
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span>Alert triage</span><span>Incident response</span><span>Phishing analysis</span><span>IOC enrichment</span><span>Threat hunting</span><span>FortiSIEM queries</span><span>Client approvals</span><span>PDF &amp; Excel reports</span>
+    <span>Alert triage</span><span>Incident response</span><span>Phishing analysis</span><span>IOC enrichment</span><span>Threat hunting</span><span>FortiSIEM queries</span><span>Client approvals</span><span>PDF &amp; Excel reports</span>
   </div>
-</section>
+</div>
 
-<section id="how" class="alt">
+<main>
+<section id="demo">
   <div class="wrap">
-    <p class="eyebrow">How it works</p>
-    <h2>From idea to import in three steps</h2>
+    <p class="kicker">See it work</p>
+    <h2>One message. One import file.</h2>
     <p class="sec-lead">No dragging and configuring steps one by one. Describe the logic the way you would explain it to a colleague.</p>
-    <div class="steps">
-      <div class="step"><h3>Describe it</h3><p>Tell Claude what should trigger the playbook, what to check and what to do.</p></div>
-      <div class="step"><h3>Claude builds &amp; validates</h3><p>The skill writes the full export and runs the static validator to catch problems FortiSOAR would reject.</p></div>
-      <div class="step"><h3>Import into FortiSOAR</h3><p>Import the JSON file in FortiSOAR, add your connector configs, and run it.</p></div>
-    </div>
-    <div class="demo">
-      <div class="win">
-        <div class="win-bar"><i></i><i></i><i></i><span>You</span></div>
-        <div class="win-body prompt">Build a FortiSOAR playbook that runs on alert create, enriches every IP with FortiGuard and VirusTotal, and closes the alert as false positive if all are clean.</div>
-      </div>
-      <div class="win">
-        <div class="win-bar"><i></i><i></i><i></i><span>validate_playbook.py · bundled example</span></div>
-        <div class="win-body"><pre><span class="k">$</span> python3 validate_playbook.py <span class="s">reference-playbook-indicator-revalidation.json</span>
+    <div class="show reveal">
+      <div class="show-bar"><i></i><i></i><i></i><span>Claude · fortisoar-playbook-builder</span></div>
+      <div class="show-body">
+        <div class="show-side">
+          <b>CHATS</b>
+          <div class="on">IP enrichment playbook</div>
+          <div>Phishing triage v2</div>
+          <div>Block IOC with approval</div>
+          <div>FortiSIEM hunt: brute force</div>
+          <b>SKILLS</b>
+          <div>fortisoar-playbook-builder</div>
+        </div>
+        <div class="chat">
+          <div class="msg-user">Build a FortiSOAR playbook that runs on alert create, enriches every IP with FortiGuard and VirusTotal, and closes the alert as false positive if all are clean.</div>
+          <div class="msg-ai">
+            <p>Built it. Then ran the bundled validator on the export, as I do for every playbook. Here's the check on the reference example that ships with the skill:</p>
+            <div class="term"><pre><span class="k">$</span> python3 validate_playbook.py <span class="s">reference-playbook-indicator-revalidation.json</span>
   <span class="ok">ok</span>    Blocked Indicator Revalidation: 13 steps, 15 routes
   <span class="k">INFO</span>  2 code-snippet step(s) - prefer native steps / Jinja where they can do the job
 
 <span class="ok">0 error(s), 0 warning(s)</span></pre></div>
+            <p><strong>Import it</strong> in FortiSOAR, set your connector configs, and run it.</p>
+            <span class="file"><i></i>alert_ip_enrichment.json</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="install">
+<section id="features" style="background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
   <div class="wrap">
-    <p class="eyebrow">Install</p>
-    <h2>Add it to Claude in under a minute</h2>
+    <p class="kicker">What it builds</p>
+    <h2>Features<sup>✦</sup></h2>
+    <p class="sec-lead">Covers the playbooks a SOC actually runs. Every rule in the skill was written after a real failure on a FortiSOAR appliance, and most of them are enforced by the bundled validator.</p>
+    <div class="feats">
+      <div class="feat reveal"><div class="pic" data-art="0"></div><div class="txt"><div class="num">#1 Triage</div><h3>Alert triage &amp; response</h3><p>Playbooks that trigger on alert create or update, set severity, assign owners and close false positives.</p></div></div>
+      <div class="feat reveal"><div class="pic" data-art="1"></div><div class="txt"><div class="num">#2 Enrich</div><h3>IOC enrichment</h3><p>Look up IPs, domains, URLs and file hashes across threat-intel connectors and record the verdicts.</p></div></div>
+      <div class="feat reveal"><div class="pic" data-art="2"></div><div class="txt"><div class="num">#3 Phish</div><h3>Phishing analysis</h3><p>Parse reported emails, extract and enrich indicators, and decide whether to quarantine.</p></div></div>
+      <div class="feat reveal"><div class="pic" data-art="3"></div><div class="txt"><div class="num">#4 Hunt</div><h3>FortiSIEM &amp; FortiAnalyzer</h3><p>Threat-hunting queries with correct event attribute names, built from a reference of 7,000+ FortiSIEM fields.</p></div></div>
+      <div class="feat reveal"><div class="pic" data-art="4"></div><div class="txt"><div class="num">#5 Respond</div><h3>Response actions</h3><p>Block, isolate and disable steps, with client approval links through manual input before anything runs.</p></div></div>
+      <div class="feat reveal"><div class="pic" data-art="5"></div><div class="txt"><div class="num">#6 Report</div><h3>PDF, HTML &amp; Excel reports</h3><p>Generate incident reports as PDF, HTML, Excel and other formats inside FortiSOAR, and attach them to the record automatically.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <p class="kicker">How it works</p>
+    <h2>Idea to import in three steps</h2>
+    <p class="sec-lead">Skip hours of step-by-step building in the playbook designer.</p>
+    <div class="steps">
+      <div class="step reveal"><div class="big">01</div><h3>Describe it</h3><p>Tell Claude what should trigger the playbook, what to check and what to do.</p></div>
+      <div class="step reveal"><div class="big">02</div><h3>Claude builds &amp; validates</h3><p>The skill writes the full export and runs the static validator to catch problems FortiSOAR would reject.</p></div>
+      <div class="step reveal"><div class="big">03</div><h3>Import into FortiSOAR</h3><p>Import the JSON file in FortiSOAR, add your connector configs, and run it.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="install" style="background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <p class="kicker">Install</p>
+    <h2>Add it in under a minute</h2>
     <p class="sec-lead">Pick the app you use. It follows the open <a href="https://agentskills.io">Agent Skills</a> format, so it also works in ChatGPT/Codex, Cursor, VS Code, Gemini CLI and other compatible agents.</p>
     <div class="tabs" role="tablist">
       <button class="tab" role="tab" aria-selected="true" aria-controls="p-code" id="t-code">Claude Code</button>
@@ -354,35 +453,40 @@ cp -r fortisoar-playbook-builder/skills/fortisoar-playbook-builder ~/.claude/ski
   </div>
 </section>
 
-<section class="alt">
+<section>
   <div class="wrap">
-    <p class="eyebrow">Privacy</p>
-    <h2>Safe to use on a SOC laptop</h2>
+    <p class="kicker">Privacy</p>
+    <h2>Safe on a SOC laptop</h2>
     <p class="sec-lead">Nothing in the plugin phones home.</p>
-    <div class="trust">
-      <div><h3>No data collected</h3><p>No analytics, telemetry or remote endpoints. <a href="https://github.com/git-Jimit/fortisoar-playbook-builder/blob/main/PRIVACY.md">Read the privacy policy</a>.</p></div>
-      <div><h3>Scripts stay local</h3><p>The validator and config extractor only read the file you give them. No network calls, no credentials.</p></div>
-      <div><h3>Open source</h3><p>Every line is on GitHub under the MIT License. Read it before you install it.</p></div>
+    <div class="trust reveal">
+      <div><div class="num">#1</div><h3>No data collected</h3><p>No analytics, telemetry or remote endpoints. <a href="https://github.com/git-Jimit/fortisoar-playbook-builder/blob/main/PRIVACY.md">Read the privacy policy</a>.</p></div>
+      <div><div class="num">#2</div><h3>Scripts stay local</h3><p>The validator and config extractor only read the file you give them. No network calls, no credentials.</p></div>
+      <div><div class="num">#3</div><h3>Open source</h3><p>Every line is on GitHub under the MIT License. Read it before you install it.</p></div>
     </div>
   </div>
 </section>
 
-<section id="faq">
+<section id="faq" style="border-top:1px solid var(--line)">
   <div class="wrap faq">
-    <p class="eyebrow">FAQ</p>
-    <h2>Questions</h2>
-    <details><summary>Is FortiSOAR Playbook Builder free?</summary><p>Yes. It is open source under the MIT License. You need your own Claude account to use it.</p></details>
-    <details><summary>Does the skill connect to my FortiSOAR instance?</summary><p>No. Claude writes a JSON export file, and you import it into FortiSOAR yourself. The bundled scripts make no network calls.</p></details>
-    <details><summary>Which Claude apps does it work in?</summary><p>Claude Code as a plugin, and Claude.ai or the Claude desktop app by uploading the skill folder.</p></details>
-    <details><summary>Does it work with other AI agents?</summary><p>Yes. It follows the open <a href="https://agentskills.io">Agent Skills</a> format, so it also loads in agents such as ChatGPT/Codex, Cursor, VS Code, Gemini CLI, Kiro and Goose. Install it with <code>npx skills add</code> or copy it into <code>~/.agents/skills</code>. It is built and tested on Claude.</p></details>
-    <details><summary>Can it review a playbook I already have?</summary><p>Yes. Give it an existing FortiSOAR playbook export and it can review, debug, extend or adapt it for another client or tenant.</p></details>
-    <details><summary>Is it made by Fortinet?</summary><p>No. It is an independent community project, not affiliated with or endorsed by Fortinet.</p></details>
+    <div>
+      <p class="kicker">FAQ</p>
+      <h2>Questions</h2>
+    </div>
+    <div>
+      <details><summary>Is FortiSOAR Playbook Builder free?</summary><p>Yes. It is open source under the MIT License. You need your own Claude account to use it.</p></details>
+      <details><summary>Does the skill connect to my FortiSOAR instance?</summary><p>No. Claude writes a JSON export file, and you import it into FortiSOAR yourself. The bundled scripts make no network calls.</p></details>
+      <details><summary>Which Claude apps does it work in?</summary><p>Claude Code as a plugin, and Claude.ai or the Claude desktop app by uploading the skill folder.</p></details>
+      <details><summary>Does it work with other AI agents?</summary><p>Yes. It follows the open <a href="https://agentskills.io">Agent Skills</a> format, so it also loads in agents such as ChatGPT/Codex, Cursor, VS Code, Gemini CLI, Kiro and Goose. Install it with <code>npx skills add</code> or copy it into <code>~/.agents/skills</code>. It is built and tested on Claude.</p></details>
+      <details><summary>Can it review a playbook I already have?</summary><p>Yes. Give it an existing FortiSOAR playbook export and it can review, debug, extend or adapt it for another client or tenant.</p></details>
+      <details><summary>Is it made by Fortinet?</summary><p>No. It is an independent community project, not affiliated with or endorsed by Fortinet.</p></details>
+    </div>
   </div>
 </section>
 
 <section class="cta">
   <div class="wrap">
-    <h2>Skip hours of step-by-step building.</h2>
+    <p class="kicker">Get started</p>
+    <h2>Skip hours of<br>step-by-step building.</h2>
     <p>Install the skill, describe your next playbook, and import it the same day.</p>
     <div class="btns">
       <a class="btn primary" href="#install">Install the skill</a>
@@ -400,6 +504,74 @@ cp -r fortisoar-playbook-builder/skills/fortisoar-playbook-builder ~/.claude/ski
 </footer>
 
 <script>
+(function () {
+  var NS = 'http://www.w3.org/2000/svg';
+  var seed = 7;
+  function rnd() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+  function el(name, attrs, parent) {
+    var n = document.createElementNS(NS, name);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+
+  // hero: rings and swirling signal strands around the playbook core
+  var rings = document.getElementById('rings');
+  [190, 235, 280].forEach(function (r, i) {
+    el('circle', {cx: 300, cy: 300, r: r, fill: 'none', stroke: '#1f2430', 'stroke-dasharray': i === 1 ? '1 6' : 'none'}, rings);
+  });
+  function strands(group, count, twist, redEvery) {
+    for (var i = 0; i < count; i++) {
+      var a = i / count * Math.PI * 2 + rnd() * .05;
+      var r0 = 152, r1 = 220 + rnd() * 75;
+      var b = a + twist * (.6 + rnd() * .8);
+      var x0 = 300 + Math.cos(a) * r0, y0 = 300 + Math.sin(a) * r0;
+      var x1 = 300 + Math.cos(b) * r1, y1 = 300 + Math.sin(b) * r1;
+      var m = (a + b) / 2, rc = r0 + (r1 - r0) * .9;
+      var cx = 300 + Math.cos(m) * rc, cy = 300 + Math.sin(m) * rc;
+      var red = i % redEvery === 0;
+      el('path', {
+        class: 'strand', d: 'M' + x0.toFixed(1) + ' ' + y0.toFixed(1) + ' Q' + cx.toFixed(1) + ' ' + cy.toFixed(1) + ' ' + x1.toFixed(1) + ' ' + y1.toFixed(1),
+        stroke: red ? '#ff4a3d' : '#e9ecf2', 'stroke-width': red ? 1.1 : .6, opacity: red ? .85 : (.12 + rnd() * .3)
+      }, group);
+      if (red) el('circle', {cx: x1.toFixed(1), cy: y1.toFixed(1), r: 2.2, fill: '#ff4a3d'}, group);
+    }
+  }
+  strands(document.getElementById('strandsA'), 110, .7, 9);
+  strands(document.getElementById('strandsB'), 70, -.9, 14);
+
+  // feature cards: a different line pattern for each
+  var arts = [
+    function (g) { for (var i = 0; i < 26; i++) el('path', {d: 'M0 ' + (20 + i * 5) + ' Q 100 ' + (i * 5 - 30) + ' 200 ' + (40 + i * 4) + ' T 400 ' + (30 + i * 5), fill: 'none', stroke: i === 13 ? '#ff4a3d' : '#e9ecf2', opacity: i === 13 ? 1 : .18, 'stroke-width': i === 13 ? 1.4 : .7}, g); },
+    function (g) { for (var i = 1; i < 14; i++) el('circle', {cx: 200, cy: 75, r: i * 11, fill: 'none', stroke: i === 5 ? '#ff4a3d' : '#e9ecf2', opacity: i === 5 ? 1 : .16}, g); for (var j = 0; j < 9; j++) el('circle', {cx: 200 + Math.cos(j) * (30 + j * 9), cy: 75 + Math.sin(j * 1.7) * (20 + j * 5), r: 2.4, fill: '#ff4a3d'}, g); },
+    function (g) { for (var x = 0; x < 400; x += 14) for (var y = 0; y < 150; y += 14) { var d = Math.hypot(x - 260, y - 70); el('rect', {x: x, y: y, width: 2, height: 2, fill: d < 50 ? '#ff4a3d' : '#e9ecf2', opacity: d < 50 ? .9 : Math.max(.05, .35 - d / 600)}, g); } el('path', {d: 'M220 50 h80 v50 h-80 z M220 50 l40 28 l40 -28', fill: 'none', stroke: '#ff4a3d', 'stroke-width': 1.4}, g); },
+    function (g) { for (var i = 0; i < 40; i++) { var h = 10 + rnd() * 90; el('rect', {x: 20 + i * 9, y: 130 - h, width: 4, height: h, fill: i === 27 ? '#ff4a3d' : '#e9ecf2', opacity: i === 27 ? 1 : .2}, g); } el('path', {d: 'M20 90 L380 90', stroke: '#ff4a3d', 'stroke-dasharray': '3 5', opacity: .7}, g); },
+    function (g) { for (var i = 0; i < 18; i++) el('path', {d: 'M200 ' + (12 + i * 3) + ' L' + (270 - i * 2) + ' ' + (38 + i * 2) + ' V' + (78 + i) + ' Q' + (270 - i * 2) + ' ' + (122 - i) + ' 200 ' + (142 - i * 2) + ' Q' + (130 + i * 2) + ' ' + (122 - i) + ' ' + (130 + i * 2) + ' ' + (78 + i) + ' V' + (38 + i * 2) + ' Z', fill: 'none', stroke: i === 0 ? '#ff4a3d' : '#e9ecf2', opacity: i === 0 ? 1 : .1}, g); },
+    function (g) { for (var i = 0; i < 7; i++) el('rect', {x: 120 + i * 9, y: 18 + i * 6, width: 120, height: 120, rx: 4, fill: '#0a0b10', stroke: i === 6 ? '#ff4a3d' : '#3a4152'}, g); for (var j = 0; j < 6; j++) el('rect', {x: 188, y: 70 + j * 12, width: j === 0 ? 60 : 80 - j * 6, height: 3, fill: j === 0 ? '#ff4a3d' : '#e9ecf2', opacity: j === 0 ? 1 : .3}, g); }
+  ];
+  document.querySelectorAll('.pic').forEach(function (p) {
+    var svg = el('svg', {viewBox: '0 0 400 150', preserveAspectRatio: 'xMidYMid slice'});
+    arts[+p.getAttribute('data-art')](el('g', {}, svg));
+    p.appendChild(svg);
+  });
+
+  // reveal on scroll
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {threshold: .12});
+    document.querySelectorAll('.reveal').forEach(function (r) { io.observe(r); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function (r) { r.classList.add('in'); });
+  }
+})();
+
+document.querySelectorAll('.qi-tabs button').forEach(function (b) {
+  b.addEventListener('click', function () {
+    document.querySelectorAll('.qi-tabs button').forEach(function (o) { o.setAttribute('aria-selected', o === b); });
+    document.getElementById('qi-cmd').textContent = b.getAttribute('data-cmd');
+  });
+});
 document.querySelectorAll('.tab').forEach(function (tab) {
   tab.addEventListener('click', function () {
     document.querySelectorAll('.tab').forEach(function (t) {
