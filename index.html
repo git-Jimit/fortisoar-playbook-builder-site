@@ -34,7 +34,7 @@
   "@type": "SoftwareApplication",
   "name": "FortiSOAR Playbook Builder",
   "applicationCategory": "SecurityApplication",
-  "operatingSystem": "Any (Claude Code, Claude.ai, Claude desktop)",
+  "operatingSystem": "Any (Claude Code, Claude.ai, Claude desktop, and other Agent Skills clients such as ChatGPT/Codex, Cursor, VS Code and Gemini CLI)",
   "description": "Claude AI skill that builds, validates and reviews FortiSOAR playbooks as importable JSON exports.",
   "softwareVersion": "1.1.2",
   "license": "https://opensource.org/licenses/MIT",
@@ -55,6 +55,8 @@
      "acceptedAnswer": {"@type": "Answer", "text": "No. Claude writes a JSON export file, and you import it into FortiSOAR yourself. The bundled scripts make no network calls."}},
     {"@type": "Question", "name": "Which Claude apps does it work in?",
      "acceptedAnswer": {"@type": "Answer", "text": "Claude Code as a plugin, and Claude.ai or the Claude desktop app by uploading the skill folder."}},
+    {"@type": "Question", "name": "Does it work with other AI agents?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Yes. It follows the open Agent Skills format, so it also loads in agents such as ChatGPT/Codex, Cursor, VS Code, Gemini CLI, Kiro and Goose. Install it with npx skills add or copy it into ~/.agents/skills. It is built and tested on Claude."}},
     {"@type": "Question", "name": "Can it review a playbook I already have?",
      "acceptedAnswer": {"@type": "Answer", "text": "Yes. Give it an existing FortiSOAR playbook export and it can review, debug, extend or adapt it for another client or tenant."}},
     {"@type": "Question", "name": "Is it made by Fortinet?",
@@ -224,7 +226,7 @@ footer a{color:var(--muted)}
           View on GitHub
         </a>
       </div>
-      <div class="meta"><span>Free</span><span>No data collected</span><span>Works in Claude Code &amp; Claude.ai</span></div>
+      <div class="meta"><span>Free</span><span>No data collected</span><span>Works in Claude &amp; any Agent Skills agent</span></div>
     </div>
 
     <div class="flow" aria-hidden="true">
@@ -308,11 +310,12 @@ footer a{color:var(--muted)}
   <div class="wrap">
     <p class="eyebrow">Install</p>
     <h2>Add it to Claude in under a minute</h2>
-    <p class="sec-lead">Pick the Claude app you use.</p>
+    <p class="sec-lead">Pick the app you use. It follows the open <a href="https://agentskills.io">Agent Skills</a> format, so it also works in ChatGPT/Codex, Cursor, VS Code, Gemini CLI and other compatible agents.</p>
     <div class="tabs" role="tablist">
       <button class="tab" role="tab" aria-selected="true" aria-controls="p-code" id="t-code">Claude Code</button>
       <button class="tab" role="tab" aria-selected="false" aria-controls="p-npx" id="t-npx">npx skills</button>
       <button class="tab" role="tab" aria-selected="false" aria-controls="p-web" id="t-web">Claude.ai / desktop</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="p-other" id="t-other">Other agents</button>
       <button class="tab" role="tab" aria-selected="false" aria-controls="p-man" id="t-man">Manual</button>
     </div>
     <div class="panel" role="tabpanel" id="p-code" aria-labelledby="t-code">
@@ -332,6 +335,14 @@ footer a{color:var(--muted)}
         <li>Zip the <code>skills/fortisoar-playbook-builder</code> folder on its own.</li>
         <li>In Claude, open <strong>Customize → Skills → Upload skill</strong> and choose that zip.</li>
       </ol>
+    </div>
+    <div class="panel" role="tabpanel" id="p-other" aria-labelledby="t-other" hidden>
+      <p>For ChatGPT/Codex, Cursor, VS Code, Gemini CLI, Kiro, Goose and other <a href="https://agentskills.io/clients">Agent Skills clients</a>, run this and pick your agent:</p>
+      <div class="code"><pre>npx skills add git-Jimit/fortisoar-playbook-builder</pre><button class="copy">Copy</button></div>
+      <p>Or copy the folder into the shared skills folder most agents read:</p>
+      <div class="code"><pre>git clone https://github.com/git-Jimit/fortisoar-playbook-builder.git
+cp -r fortisoar-playbook-builder/skills/fortisoar-playbook-builder ~/.agents/skills/</pre><button class="copy">Copy</button></div>
+      <p>The skill is built and tested on Claude. Results in other agents depend on the model.</p>
     </div>
     <div class="panel" role="tabpanel" id="p-man" aria-labelledby="t-man" hidden>
       <p>Copy the skill into your personal Claude skills folder:</p>
@@ -363,6 +374,7 @@ cp -r fortisoar-playbook-builder/skills/fortisoar-playbook-builder ~/.claude/ski
     <details><summary>Is FortiSOAR Playbook Builder free?</summary><p>Yes. It is open source under the MIT License. You need your own Claude account to use it.</p></details>
     <details><summary>Does the skill connect to my FortiSOAR instance?</summary><p>No. Claude writes a JSON export file, and you import it into FortiSOAR yourself. The bundled scripts make no network calls.</p></details>
     <details><summary>Which Claude apps does it work in?</summary><p>Claude Code as a plugin, and Claude.ai or the Claude desktop app by uploading the skill folder.</p></details>
+    <details><summary>Does it work with other AI agents?</summary><p>Yes. It follows the open <a href="https://agentskills.io">Agent Skills</a> format, so it also loads in agents such as ChatGPT/Codex, Cursor, VS Code, Gemini CLI, Kiro and Goose. Install it with <code>npx skills add</code> or copy it into <code>~/.agents/skills</code>. It is built and tested on Claude.</p></details>
     <details><summary>Can it review a playbook I already have?</summary><p>Yes. Give it an existing FortiSOAR playbook export and it can review, debug, extend or adapt it for another client or tenant.</p></details>
     <details><summary>Is it made by Fortinet?</summary><p>No. It is an independent community project, not affiliated with or endorsed by Fortinet.</p></details>
   </div>
